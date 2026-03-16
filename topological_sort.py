@@ -11,6 +11,39 @@ import json
 from dotenv import load_dotenv
 load_dotenv(override=True)
 
+
+exclude_dirs = ['.venv','__pycache__','venv']
+
+def walk_directories():
+    all_files_folders = os.listdir('.')
+    
+    python_files = []
+    dirs = []
+    
+    for file in all_files_folders:
+        if os.path.isdir(file) and file not in exclude_dirs:
+            dirs.append(file)
+        
+        if file[-3:] == '.py' and file!='topological_sort.py':
+            python_files.append(file)
+    
+    while len(dirs)!=0:
+        
+        dir = dirs.pop(0)
+        
+        dir_files = os.listdir(dir)
+        
+        for file in dir_files:
+            path = dir + "/" + file
+            if os.path.isdir(path) and path not in exclude_dirs:
+                dirs.append(path)
+            
+            if file[-3:] == '.py' and file!='topological_sort.py':
+                python_files.append(file)
+    
+    return python_files
+
+
 def topological_sort(graph):
     visited = set()
     stack = []
@@ -126,13 +159,14 @@ def mm(graph):
 
 def main():
     
-    all_files = os.listdir('.')
+    # all_files = os.listdir('.')
     
-    python_files = []
-    for file in all_files:
-        if file[-3:] == '.py' and file!='topological_sort.py':
-            python_files.append(file)
+    # python_files = []
+    # for file in all_files:
+    #     if file[-3:] == '.py' and file!='topological_sort.py':
+    #         python_files.append(file)
     
+    python_files = walk_directories()
     print(python_files)
     
     graph = {}
