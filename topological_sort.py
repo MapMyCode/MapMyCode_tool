@@ -1,5 +1,5 @@
 import os
-from MapMyCode_tool.groq_call import run_groq_api
+from groq_call import run_groq_api
 import base64
 import io, requests
 from IPython.display import Image, display
@@ -27,35 +27,6 @@ def walk_directories():
                 python_files.append(os.path.join(root, file))
 
     return python_files
-
-# def walk_directories():
-#     all_files_folders = os.listdir('.')
-    
-#     python_files = []
-#     dirs = []
-    
-#     for file in all_files_folders:
-#         if os.path.isdir(file) and file not in exclude_dirs:
-#             dirs.append(file)
-        
-#         if file[-3:] == '.py' and file!='topological_sort.py':
-#             python_files.append(file)
-    
-#     while len(dirs)!=0:
-        
-#         dir = dirs.pop(0)
-        
-#         dir_files = os.listdir(dir)
-        
-#         for file in dir_files:
-#             path = dir + "/" + file
-#             if os.path.isdir(path) and path not in exclude_dirs:
-#                 dirs.append(path)
-            
-#             if file[-3:] == '.py' and file!='topological_sort.py':
-#                 python_files.append(file)
-    
-#     return python_files
 
 
 def topological_sort(graph):
