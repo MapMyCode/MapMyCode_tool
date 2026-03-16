@@ -8,7 +8,7 @@ import httpx
 import asyncio
 from dotenv import load_dotenv
 from fastmcp import FastMCP
-from MapMyCode_tool.utils import clean_html_to_txt
+from MapMyCode_tool.MCP.utils import clean_html_to_txt
 
 load_dotenv(override=True)
 

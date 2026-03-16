@@ -12,36 +12,50 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 exclude_dirs = ['.venv','__pycache__','venv']
 
 def walk_directories():
-    all_files_folders = os.listdir('.')
-    
     python_files = []
-    dirs = []
-    
-    for file in all_files_folders:
-        if os.path.isdir(file) and file not in exclude_dirs:
-            dirs.append(file)
-        
-        if file[-3:] == '.py' and file!='topological_sort.py':
-            python_files.append(file)
-    
-    while len(dirs)!=0:
-        
-        dir = dirs.pop(0)
-        
-        dir_files = os.listdir(dir)
-        
-        for file in dir_files:
-            path = dir + "/" + file
-            if os.path.isdir(path) and path not in exclude_dirs:
-                dirs.append(path)
-            
-            if file[-3:] == '.py' and file!='topological_sort.py':
-                python_files.append(file)
-    
+
+    for root, dirs, files in os.walk("."):
+        dirs[:] = [d for d in dirs if d not in exclude_dirs]
+
+        for file in files:
+            if file.endswith(".py") and file != "topological_sort.py":
+                python_files.append(os.path.join(root, file))
+
     return python_files
+
+# def walk_directories():
+#     all_files_folders = os.listdir('.')
+    
+#     python_files = []
+#     dirs = []
+    
+#     for file in all_files_folders:
+#         if os.path.isdir(file) and file not in exclude_dirs:
+#             dirs.append(file)
+        
+#         if file[-3:] == '.py' and file!='topological_sort.py':
+#             python_files.append(file)
+    
+#     while len(dirs)!=0:
+        
+#         dir = dirs.pop(0)
+        
+#         dir_files = os.listdir(dir)
+        
+#         for file in dir_files:
+#             path = dir + "/" + file
+#             if os.path.isdir(path) and path not in exclude_dirs:
+#                 dirs.append(path)
+            
+#             if file[-3:] == '.py' and file!='topological_sort.py':
+#                 python_files.append(file)
+    
+#     return python_files
 
 
 def topological_sort(graph):
@@ -155,7 +169,8 @@ def mm(graph):
     img = im.open(io.BytesIO(requests.get('https://mermaid.ink/img/' + base64_string).content))
     plt.imshow(img)
     plt.axis('off') # allow to hide axis
-    plt.savefig('image.png', dpi=1200)
+    image_path = os.path.join(BASE_DIR, "image.png")
+    plt.savefig(image_path, dpi=1200)
 
 def main():
     
@@ -203,8 +218,10 @@ def main():
         result = get_file_summary(file, file_content, dependencies_dict)
         results[file] = result
 
+    output_file = os.path.join(BASE_DIR, "results.json")
 
-    json.dump(results, open('results.json','w'))
+    with open(output_file, "w") as f:
+        json.dump(results, f, indent=2)
     
     response = get_mermaid_flowchart_prompt(results, graph)
     response = response.replace("```mermaid", "").replace("```", "").strip()
