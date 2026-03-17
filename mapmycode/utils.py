@@ -5,7 +5,7 @@ from IPython.display import Image, display
 from PIL import Image as im
 import matplotlib.pyplot as plt
 from groq_call import run_groq_api
-from prompts import get_file_summary, get_mermaid_flowchart_prompt
+from prompts import get_mermaid_flowchart_prompt, get_documentation_prompt
 
 exclude_dirs = ['.venv','__pycache__','venv','mapmycode']
 
@@ -21,43 +21,14 @@ def walk_directories(path):
 
     return python_files
 
-def create_graph(python_files):
-    graph = {}
-    file_contents = {}
-    for i in range(len(python_files)):
-        with open(python_files[i],'r') as f:
-            current_content = f.read()
-            
-        file_contents[python_files[i]] = current_content
-        graph[python_files[i]] = []
-        
-        for j in range(len(python_files)):
-            
-            if i == j:
-                continue
-            
-            search_term = "from " + python_files[j][:-3]
-            if search_term in current_content:
-                graph[python_files[i]] += [python_files[j]]
+def create_documentation(files_metadata,path):
+    prompt = get_documentation_prompt(files_metadata)
+    response = run_groq_api(prompt)
     
-    return graph, file_contents
-
-def create_dependency_dict(graph,order,file_contents):
-    results = {}
-    for file in order:
-        file_content = file_contents[file]
-        
-        dependencies = graph[file]
-        dependencies_dict = {}
-        
-        for dependency in dependencies:
-            dependencies_dict[dependency] = results[dependency]
-        
-        summary_prompt = get_file_summary(file,file_content, dependencies_dict)
-        result = run_groq_api(summary_prompt)
-        results[file] = result
+    path = os.path.join(path,"documentation.md")
+    with open(path,'w') as f:
+        f.write(response)
     
-    return results
 
 def mm(graph, base_dir):
     graphbytes = graph.encode("utf8")

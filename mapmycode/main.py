@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 from utils import *
 import json
-from topological_sort import topological_sort
+from graph_algos import topological_sort,create_dependency_dict, create_graph
 
 load_dotenv(override=True)
 
@@ -23,6 +23,8 @@ def main(path):
 
     with open(output_file, "w") as f:
         json.dump(file_wise_summary, f, indent=2)
+    
+    create_documentation(file_wise_summary,path)
     
     create_mermaid_diagram(graph,file_wise_summary,path)
 
