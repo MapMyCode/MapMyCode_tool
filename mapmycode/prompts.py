@@ -54,7 +54,7 @@ def get_documentation_prompt(files_metadata):
     prompt = f"""
     You are an expert software architect, code analyst, and technical documentation writer.
 
-    Your task is to produce comprehensive Markdown documentation for a Python codebase using the provided file metadata.
+    Your task is to produce clean and structured Markdown documentation for a Python codebase using the provided file metadata.
 
     The metadata may contain:
     - file names
@@ -77,52 +77,47 @@ def get_documentation_prompt(files_metadata):
     - the major capabilities suggested by the file structure
 
     ## 2. Logical Flow
-    Describe the likely end-to-end flow of the codebase.
-    Include:
+    Describe the likely end-to-end flow of the codebase:
     - probable starting point or entry file(s)
     - how data or control moves across modules
-    - how different files interact to accomplish the overall goal
-    - the likely execution pipeline from beginning to end
+    - how different files interact
+    - the execution pipeline from beginning to end
 
-    Where exact flow is not explicit, provide a reasoned inference based on the metadata.
+    Where exact flow is not explicit, provide a reasoned inference.
 
     ## 3. File-wise Explanations
-    For every file, create a dedicated subsection in the following style:
+    For every file, create a subsection:
 
-    ### `<filename>`
-    - **Purpose:** ...
-    - **Key Functions / Classes:** ...
-    - **Role in Codebase:** ...
-    - **Notes:** ...
+    ### <filename>
+    Purpose:
+    Key functions and classes:
+    Role in the codebase:
+    Notes:
 
-    Explain each file in a way that helps a new developer understand why it exists and how it fits into the system.
+    Write in plain sentences without special formatting.
 
     ## 4. File-wise Dependencies
-    For every file, document:
-    - which internal files it depends on
-    - what it likely imports from them
-    - why those dependencies are needed
+    For every file:
 
-    Use a structured format such as:
+    ### <filename>
+    Depends on:
+    Dependency purpose:
+    Remarks:
 
-    ### `<filename>`
-    - Depends on: `file_a.py`, `file_b.py`
-    - Dependency purpose: ...
-    - Remarks: ...
-
-    If no internal dependencies exist, write that explicitly.
+    If no internal dependencies exist, state that clearly.
 
     ---
 
     # Writing Guidelines
 
-    - Output only valid Markdown.
-    - Use clear headings and subheadings.
-    - Be technical, clear, and structured.
-    - Do not merely restate metadata; interpret and synthesize it.
-    - Do not fabricate unsupported details.
-    - If something is uncertain, label it as an inference.
-    - Write as if this documentation will be read by engineers onboarding onto the project.
+    - Output clean Markdown without bold, italics, or special styling symbols.
+    - Do not use **, *, or other decorative characters.
+    - Keep formatting simple and readable.
+    - Use headings, spacing, and plain text for structure.
+    - Do not restate metadata directly; interpret it.
+    - Do not invent unsupported details.
+    - If something is uncertain, explicitly mention it as an inference.
+    - Write for engineers who are new to the codebase.
 
     ---
 
@@ -131,6 +126,7 @@ def get_documentation_prompt(files_metadata):
     {files_metadata}
     """
     return prompt
+  
 
 
 def get_mermaid_flowchart_prompt(files_metadata, dependency_graph):
