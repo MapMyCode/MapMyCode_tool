@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
 import os
-from utils import *
+from mapmycode.utils import *
 import json
-from graph_algos import topological_sort,create_dependency_dict, create_graph
+from mapmycode.graph_algos import topological_sort,create_dependency_dict, create_graph
 
 load_dotenv(override=True)
 

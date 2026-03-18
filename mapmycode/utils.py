@@ -4,10 +4,10 @@ import io, requests
 from IPython.display import Image, display
 from PIL import Image as im
 import matplotlib.pyplot as plt
-from groq_call import run_groq_api
-from prompts import get_mermaid_flowchart_prompt, get_documentation_prompt
+from mapmycode.groq_call import run_groq_api
+from mapmycode.prompts import get_mermaid_flowchart_prompt, get_documentation_prompt
 
-exclude_dirs = ['.venv','__pycache__','venv','mapmycode']
+exclude_dirs = ['.venv','__pycache__','venv','mapmycode','.test-env','dist']
 
 def walk_directories(path):
     python_files = []

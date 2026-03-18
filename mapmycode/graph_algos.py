@@ -1,5 +1,6 @@
-from groq_call import run_groq_api
-from prompts import get_file_summary
+from mapmycode.groq_call import run_groq_api
+from mapmycode.prompts import get_file_summary
+import os
 
 def topological_sort(graph):
     visited = set()
@@ -38,6 +39,8 @@ def create_graph(python_files):
                 continue
             
             search_term = "from " + python_files[j][:-3]
+            #module_name = python_files[j].replace("/", ".").replace("\\", ".")[:-3]
+            #search_term = f"from {module_name}"
             if search_term in current_content:
                 graph[python_files[i]] += [python_files[j]]
     

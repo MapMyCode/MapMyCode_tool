@@ -1,14 +1,30 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "ai-architecture-diagram"
-version = "0.1.0"
-description = "Add your description here"
+name = "mapmycode"
+version = "1.0.0"
+description = "Analyzes python codebases and generates documentation with dependency graphs"
+authors = [
+    { name = "Saurav Pattnaik" },
+    { name = "Jayant Pal" },
+]
 readme = "README.md"
 requires-python = ">=3.12"
+
 dependencies = [
-    "dotenv>=0.9.9",
+    "python-dotenv>=1.0.0",
     "groq>=1.1.1",
     "ipython>=9.11.0",
     "matplotlib>=3.10.8",
     "pillow>=12.1.1",
     "requests>=2.32.5",
 ]
+
+[project.scripts]
+mapmycode = "mapmycode.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mapmycode*"]
